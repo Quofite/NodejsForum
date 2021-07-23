@@ -1,0 +1,3 @@
+D:\Coding\Forum\ForumOnNode\ForumOnNode\obj\Debug\ForumOnNode.njsproj.AssemblyReference.cache
+D:\Coding\Forum\ForumOnNode\ForumOnNode\obj\Debug\ForumOnNode.njsproj.CoreCompileInputs.cache
+D:\Coding\Forum\ForumOnNode\ForumOnNode\bin\Microsoft.NodejsTools.WebRole.dll
