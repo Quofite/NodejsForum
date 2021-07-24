@@ -32,6 +32,7 @@
     <Content Include="package.json" />
     <Content Include="README.md" />
     <Content Include="smth.js" />
+    <Content Include="views\forum.html" />
     <Content Include="views\index.html" />
     <Content Include="views\register.html" />
   </ItemGroup>
