@@ -6,7 +6,7 @@ const mysql = require("mysql2");        // getting mysql driver
 const smth = require("./smth");         // getting db data
 var autorizationCheck = false;          // used to prevent from entering the forum without loginig
 
-//-----------------------------------------------------------------
+//------------- custom functions --------------------------
 
 function insert(connection, login, password) {  // getting connection(db data) and entered user-wrote data
     const sql = `INSERT INTO users(login, password) VALUES (?, ?)`; // sql-string w/ plugs
@@ -30,6 +30,10 @@ app.get("/register(.html)?", function (request, response) {
     response.sendFile(__dirname + "/views/register.html");
 });
 
+app.get("/info(.html)?", function (request, response) {
+    response.sendFile(__dirname + "/views/info.html");
+});
+
 app.get("/forum", function (request, response) {
     if (autorizationCheck)
         response.sendFile(__dirname + "/views/forum.html");
@@ -37,6 +41,7 @@ app.get("/forum", function (request, response) {
         response.sendFile(__dirname + "/views/oops.html");
 });
 
+// getting messages form database
 app.get("/getdata", function (request, response) {
     const connection = mysql.createConnection({ // getting db connection
         host: smth.host,
@@ -67,7 +72,7 @@ app.get("/getdata", function (request, response) {
     }, 3000);
 });
 
-//---------------------- handling of post-requests -----------
+//---------------------- handling of post-requests -----------------------------------------------------------------
 // ------------- autorization -------
 app.post("/loginhandler", urlencodedParser, function (request, response) {
     if (!request.body)                                          // checking if anything is in the request

@@ -7,18 +7,29 @@
     <title>Forum</title>
 </head>
 <body>
+    <div class="mt-5 container">
+        <form id="messageSender" method="post" action="messageHadling">
+            <textarea name="comment" class="form-control" cols="150" rows="7" placeholder="Enter something..."></textarea><br>
+            <p>
+                <input type="submit" class="btn btn-success" value="Send"> <input type="reset" class="btn btn-secondary" value="Clear"> <a href="info.html">Information</a>
+            </p>
+        </form>
+    </div>
+    
     <div class="mt-5 container" id="messagesBox"> </div>
     <script>
-        let request = new XMLHttpRequest();
-        request.open("GET", "/getdata", true);
+        setInterval(()=>{
+            let request = new XMLHttpRequest();
+            request.open("GET", "/getdata", true);
         
-        request.addEventListener("load", ()=>{
-            let recieved = request.response;
-            let messbox = document.getElementById("messagesBox");
-            messbox.innerHTML = recieved;
-        });
+            request.addEventListener("load", ()=>{
+                let recieved = request.response;
+                let messbox = document.getElementById("messagesBox");
+                messbox.innerHTML = recieved;
+            });
         
-        request.send();
+            request.send();
+        }, 5000);
     </script>
 </body>
 </html>
