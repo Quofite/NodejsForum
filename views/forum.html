@@ -1,1 +1,24 @@
-<h1>Content</h1>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Forum</title>
+</head>
+<body>
+    <div class="mt-5 container" id="messagesBox"> </div>
+    <script>
+        let request = new XMLHttpRequest();
+        request.open("GET", "/getdata", true);
+        
+        request.addEventListener("load", ()=>{
+            let recieved = request.response;
+            let messbox = document.getElementById("messagesBox");
+            messbox.innerHTML = recieved;
+        });
+        
+        request.send();
+    </script>
+</body>
+</html>

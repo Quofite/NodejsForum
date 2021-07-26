@@ -4,12 +4,13 @@ const bodyParser = require("body-parser");      // getting parser
 const urlencodedParser = bodyParser.urlencoded({ extended: false });    // parser too
 const mysql = require("mysql2");        // getting mysql driver
 const smth = require("./smth");         // getting db data
+var autorizationCheck = false;          // used to prevent from entering the forum without loginig
 
 //-----------------------------------------------------------------
 
 function insert(connection, login, password) {  // getting connection(db data) and entered user-wrote data
     const sql = `INSERT INTO users(login, password) VALUES (?, ?)`; // sql-string w/ plugs
-    const filter = [login, password];       // things to be instead og the plugs
+    const filter = [login, password];       // things to be instead of the plugs
 
     //sql-query
     connection.query(sql, filter, function (err, results) {
@@ -29,8 +30,41 @@ app.get("/register(.html)?", function (request, response) {
     response.sendFile(__dirname + "/views/register.html");
 });
 
-app.use("/forum(.html)?", function (request, response) {
-    response.sendFile(__dirname + "/views/forum.html");
+app.get("/forum", function (request, response) {
+    if (autorizationCheck)
+        response.sendFile(__dirname + "/views/forum.html");
+    else
+        response.sendFile(__dirname + "/views/oops.html");
+});
+
+app.get("/getdata", function (request, response) {
+    const connection = mysql.createConnection({ // getting db connection
+        host: smth.host,
+        user: smth.user,
+        password: smth.pass,
+        database: smth.db
+    });
+
+    const sql = `SELECT * FROM messages`;   
+    var result = "";
+
+    // sql-query
+    connection.query(sql, function (err, results) {
+        if (err) throw err;
+
+        var intermediate = results; // variable where all sql results writed
+
+        // outputing messages in reverse order (higher = newer)
+        for (var i = intermediate.length - 1; i >= 0; i--) {
+            result += `<b>${intermediate[i].login}:</b> ${intermediate[i].message}<hr>`;
+        }
+
+        response.send(result);
+    });
+
+    setTimeout(() => {
+        connection.end();
+    }, 3000);
 });
 
 //---------------------- handling of post-requests -----------
@@ -52,7 +86,7 @@ app.post("/loginhandler", urlencodedParser, function (request, response) {
     });
 
     const sql = `SELECT * FROM users WHERE login=? AND password=?`;     // sql-string with plugs
-    const filter = [login, pass];                       // thing to be instead of plig
+    const filter = [login, pass];                       // thing to be instead of plug
 
     // sql-query
     connection.query(sql, filter, function (err, results) {
@@ -62,7 +96,8 @@ app.post("/loginhandler", urlencodedParser, function (request, response) {
             return;
         }
 
-        response.redirect("/forum.html");   // if everything is ok, redirect to forum
+        autorizationCheck = true;
+        response.redirect("/forum");   // if everything is ok, redirect to forum
     });
 
     setTimeout(() => {      // ending of the connection after 1 second after the sql-query
