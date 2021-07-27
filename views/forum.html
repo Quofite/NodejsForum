@@ -18,8 +18,9 @@
     
     <div class="mt-5 container" id="messagesBox"> </div>
     <script>
+        let request = new XMLHttpRequest();
+        
         setInterval(()=>{
-            let request = new XMLHttpRequest();
             request.open("GET", "/getdata", true);
         
             request.addEventListener("load", ()=>{
