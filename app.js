@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");      // getting parser
 const urlencodedParser = bodyParser.urlencoded({ extended: false });    // parser too
 const mysql = require("mysql2");        // getting mysql driver
 const smth = require("./smth");         // getting db data
-var autorizationCheck = false;          // used to prevent from entering the forum without loginig
+var autorizationCheck = null;          // used to prevent from entering the forum without loginig
 
 //------------- custom functions --------------------------
 
@@ -101,7 +101,7 @@ app.post("/loginhandler", urlencodedParser, function (request, response) {
             return;
         }
 
-        autorizationCheck = true;
+        autorizationCheck = login;
         response.redirect("/forum");   // if everything is ok, redirect to forum
     });
 
@@ -112,7 +112,7 @@ app.post("/loginhandler", urlencodedParser, function (request, response) {
 
 //-------------- registration ---------------
 app.post("/registerhandling", urlencodedParser, function (request, response) {
-    if (!request.body)                                          // checking if anythins in request
+    if (!request.body)                                          // checking if anything in request
         return response.sendStatus(400);
 
     // getting entered data
@@ -146,6 +146,36 @@ app.post("/registerhandling", urlencodedParser, function (request, response) {
         connection.end();
     }, 1000);
 });
+// sending messages
+app.post("/messageHandling", urlencodedParser, function (request, response) {
+    if (!request.body)
+        return response.sendStatus(400);
+
+    let login = autorizationCheck;
+    let message = request.body.comment;
+
+    const connection = mysql.createConnection({
+        host: smth.host,
+        user: smth.user,
+        password: smth.pass,
+        database: smth.db
+    });
+
+    var sql = `INSERT INTO messages(login, message) VALUES(?, ?)`;
+    var filter = [login, message];
+
+    connection.query(sql, filter, function (err, results) {
+        if (err) throw err;
+
+        console.log("Added new message");
+        response.redirect("/forum");
+    });
+
+    setTimeout(() => {
+        connection.end();
+    }, 3000);
+});
+
 
 // listening by port
 app.listen(3000, () => {
