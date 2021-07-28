@@ -29,7 +29,9 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include=".gitignore" />
     <Content Include="app.js" />
+    <Content Include="EXAMPLE-smth.js" />
     <Content Include="package.json" />
     <Content Include="README.md" />
     <Content Include="smth.js" />

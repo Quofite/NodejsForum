@@ -178,6 +178,6 @@ app.post("/messageHandling", urlencodedParser, function (request, response) {
 
 
 // listening by port
-app.listen(3000, () => {
-    console.log("Server started listening at 3000");
+app.listen(process.env.PORT, () => {
+    console.log("Server started listening");
 });
