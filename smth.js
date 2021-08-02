@@ -1,6 +1,6 @@
 // well, this file contains nothing but db data
 
-module.exports.host = "localhost";      // host
-module.exports.user = "root";           // username
-module.exports.pass = "Jkjkjav1206-_-"; // password
-module.exports.db = "usersvalut";       // name of the using db
+module.exports.host = "localhost";       // host
+module.exports.user = "mysql";           // username
+module.exports.pass = "mysql";           // password
+module.exports.db = "uservalut";         // name of the using db

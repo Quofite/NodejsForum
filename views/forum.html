@@ -18,9 +18,7 @@
     
     <div class="mt-5 container" id="messagesBox"> </div>
     <script>
-        let request = new XMLHttpRequest();
-        
-        setInterval(()=>{
+        function show(){
             request.open("GET", "/getdata", true);
         
             request.addEventListener("load", ()=>{
@@ -28,8 +26,15 @@
                 let messbox = document.getElementById("messagesBox");
                 messbox.innerHTML = recieved;
             });
-        
+            
             request.send();
+        }
+        
+        let request = new XMLHttpRequest();
+        show();
+        
+        setInterval(()=>{
+            show();
         }, 5000);
     </script>
 </body>
